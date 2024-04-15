@@ -51,6 +51,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}  # [not win]
     - cmake                      # [win]
+    - flang                      # [win]
     - automake                   # [not win]
     - autoconf                   # [not win]
     - libtool                    # [not win]
