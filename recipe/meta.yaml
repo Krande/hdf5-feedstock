@@ -41,6 +41,7 @@ source:
 build:
   number: {{ build }}
   string: {{ mpi_prefix }}_h{{ PKG_HASH }}_{{ build }}
+  script: "%RECIPE_DIR%\\bld-ifx.bat"  # [win]
   run_exports:
     - {{ pin_subpackage('hdf5', max_pin='x.x.x') }} {{ build_pin }}
 
@@ -50,7 +51,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}  # [not win]
-    - flang                      # [win]
     - cmake                      # [win]
     - automake                   # [not win]
     - autoconf                   # [not win]
