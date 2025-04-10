@@ -7,23 +7,28 @@ cd build
 :: Set environment variables.
 set HDF5_EXT_ZLIB=zlib.lib
 
-:: Fortran support is only
-if "%mpi%"=="nompi" (
-    set _LIBRARY=%LIBRARY_PREFIX:\=/%
-    :: Needed by IFX
-    set "LIB=%BUILD_PREFIX%\Library\lib;%LIB%"
-    set "INCLUDE=%BUILD_PREFIX%\opt\compiler\include\intel64;%INCLUDE%"
-    set "CMAKE_ARGS=!CMAKE_ARGS! -D HDF5_BUILD_FORTRAN:BOOL=ON"
-)
+@REM :: Fortran support is only
+@REM if "%mpi%"=="nompi" (
+@REM
+@REM )
+
+set _LIBRARY=%LIBRARY_PREFIX:\=/%
+:: Needed by IFX
+set "LIB=%BUILD_PREFIX%\Library\lib;%LIB%"
+set "INCLUDE=%BUILD_PREFIX%\opt\compiler\include\intel64;%INCLUDE%"
+set "CMAKE_ARGS=!CMAKE_ARGS! -D HDF5_BUILD_FORTRAN:BOOL=ON"
 
 set "CXXFLAGS=%CXXFLAGS% -LTCG"
 if "%mpi%"=="impi" (
+  set FC=mpiifx
   :: cmake generates syntax errors if there are backslashes in paths
   set _LIBRARY=%LIBRARY_PREFIX:\=/%
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_C_ADDITIONAL_INCLUDE_DIRS:PATH=!_LIBRARY!/include"
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_CXX_ADDITIONAL_INCLUDE_DIRS:PATH=!_LIBRARY!/include"
+  set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_FC_ADDITIONAL_INCLUDE_DIRS:PATH=!_LIBRARY!/include"
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_C_LIB_NAMES=IMPI"
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_CXX_LIB_NAMES=IMPI"
+  set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_FC_LIB_NAMES=IMPI"
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_IMPI_LIBRARY:PATH=!_LIBRARY!/lib/impi.lib"
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_ASSUME_NO_BUILTIN_MPI=ON"
   set "CMAKE_ARGS=!CMAKE_ARGS! -D MPI_SKIP_COMPILER_WRAPPER=ON"
